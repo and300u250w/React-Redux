@@ -84,13 +84,24 @@ export default class App extends Component {
 
     }
 
-    // searchField (items, search){
+    searchField (items, search){
+        
+        if (search.length ===0) {
+            return items;
+        }
+        
+        return items.filter((item) => {
+            return item.label.toLowerCase().indexOf(search.toLowerCase()) > -1;
+        });
 
-    //     if (search.length ===0){
 
-    //     }
+        }
 
-    // }
+        onSearchChange = (search)=> {
+            
+
+            this.setState({search});
+        };
 
     render() {
 
@@ -99,18 +110,18 @@ export default class App extends Component {
       const doneCount = todoData.filter((el) => el.done).length;
       const todoCount = todoData.filter((el) => el.done===false).length
       
-    //   const visibleItems = this.searchField(todoData, search)
+      const visibleItems = this.searchField(todoData, search)
       
         return (
             <div className="todo-app">
                 <AppHeader toDo={todoCount} done={doneCount}/>
                 <div className="top-panel d-flex">
-                    <SearchPanel searchField={this.searchField} />
+                    <SearchPanel  onSearchChange = {this.onSearchChange}/>
                     <ItemStatusFilter/>
                 </div>
 
                 <TodoList
-                    todos={todoData}
+                    todos={visibleItems}
                     onDeleted={this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
                     onToggleDone={this.onToggleDone}/>
